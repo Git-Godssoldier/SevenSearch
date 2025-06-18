@@ -1,0 +1,72 @@
+{
+  "mcpServers": {
+    "playwright": {
+      "command": "npx",
+      "args": [
+        "-y",
+        "@playwright/mcp@latest"
+      ]
+    },
+    "scrapybara": {
+      "command": "npx",
+      "args": [
+        "@scrapybara/mcp-server"
+      ],
+      "env": {
+        "SCRAPYBARA_API_KEY": "scrapy-fb16c7eb-2450-4d6e-89b3-9ec0a0931295"
+      }
+    },
+    "hyperbrowser": {
+      "command": "npx",
+      "args": [
+        "-y",
+        "@hyperbrowser/mcp-server"
+      ],
+      "env": {
+        "HYPERBROWSER_API_KEY": "hb_89ecf89b95704397b7124e324cd0"
+      }
+    },
+    "context7": {
+      "command": "npx",
+      "args": [
+        "@context7/client"
+      ],
+      "env": {
+        "C7_API_KEY": "context7_sk_c7_7e16cbd2befc45f691fe9d307fb57864"
+      }
+    },
+    "operative": {
+      "command": "npx",
+      "args": [
+        "-y",
+        "@operative/mcp-server"
+      ],
+      "env": {
+        "OPERATIVE_API_KEY": "op-KLoKiSTKVXUciE6OhbDTn5Q8iCyjuiTqN1lBkJL0AFY"
+      }
+    },
+    "scenario": {
+      "command": "npx",
+      "args": [
+        "-y",
+        "@scenario/mcp-server"
+      ],
+      "env": {
+        "SCENARIO_API_KEY": "scen_c1e82e7afe0d437296dbbed9"
+      }
+    },
+    "daytona": {
+      "command": "npx",
+      "args": [
+        "-y",
+        "@daytona/mcp"
+      ],
+      "env": {
+        "DAYTONA_API_KEY": "dtn_0727643505f6d4c6b7ef14eb924a9ab770c0a1d9526d2f38166ee7f3044d30ac",
+        "DAYTONA_API_URL": "https://app.daytona.io/api",
+        "DAYTONA_ORGANIZATION_ID": "2245f69f-8758-4ea4-a647-d2e514cb6c3f",
+        "DAYTONA_ORGANIZATION_NAME": "38f87a8d-5884-4176-bdc7-8adc001c77cf"
+      }
+    }
+  }
+}

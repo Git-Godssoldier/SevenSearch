@@ -1,0 +1,25 @@
+{
+  "version": 2,
+  "public": true,
+  "builds": [
+    {
+      "src": "package.json",
+      "use": "@vercel/next",
+      "config": {
+        "installCommand": "npm install --legacy-peer-deps",
+        "cache": false,
+        "env": {
+          "AUTH_BYPASS_ENABLED": "true",
+          "NEXT_RUNTIME": "nodejs"
+        }
+      }
+    }
+  ],
+  "env": {
+    "AUTH_BYPASS_ENABLED": "true",
+    "ENCRYPTION_SECRET": "${ENCRYPTION_SECRET}",
+    "NEXTAUTH_SECRET": "${NEXTAUTH_SECRET}",
+    "NEXTAUTH_URL": "${NEXTAUTH_URL}"
+  },
+  "rewrites": []
+}

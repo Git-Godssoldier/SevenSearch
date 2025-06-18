@@ -1,0 +1,2 @@
+# Ignore middleware to prevent MIDDLEWARE_INVOCATION_FAILED error
+src/middleware.ts

@@ -1,0 +1,23 @@
+-- Recommended SQL Execution Order
+-- Run these scripts in the Supabase SQL Editor in this order
+
+-- Step 1: Install required extensions
+-- First run /migrations/output/check_extensions.sql to check what's available
+-- Then run /migrations/output/install_extensions.sql if needed
+
+-- Step 2: Create tables and related objects
+
+-- Create users table and related objects
+-- Run: /migrations/output/tables/01_users.sql
+
+-- Create searches table and related objects
+-- Run: /migrations/output/tables/02_searches.sql
+
+-- Create suspended_workflows table and related objects
+-- Run: /migrations/output/tables/03_suspended_workflows.sql
+
+-- Create tasks table and related objects
+-- Run: /migrations/output/tables/04_tasks.sql
+
+-- Create workflow_planning table and related objects
+-- Run: /migrations/output/tables/05_workflow_planning.sql

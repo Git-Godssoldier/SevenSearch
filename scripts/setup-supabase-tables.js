@@ -1,0 +1,347 @@
+// Supabase Table Setup Script
+// This script sets up the required tables in Supabase directly via the API
+
+require('dotenv').config({ path: '.env.local' });
+const https = require('https');
+const url = require('url');
+
+// Get Supabase credentials from environment
+const SUPABASE_URL = process.env.SUPABASE_URL;
+const SUPABASE_SERVICE_ROLE_KEY = process.env.SUPABASE_SERVICE_ROLE_KEY;
+
+if (!SUPABASE_URL || !SUPABASE_SERVICE_ROLE_KEY) {
+  console.error('SUPABASE_URL and SUPABASE_SERVICE_ROLE_KEY are required in the .env.local file');
+  process.exit(1);
+}
+
+// Parse Supabase URL
+const parsedUrl = url.parse(SUPABASE_URL);
+const supabaseHost = parsedUrl.hostname;
+
+// SQL commands to create tables
+const createUsersTableSQL = `
+CREATE TABLE IF NOT EXISTS public.users (
+  id UUID PRIMARY KEY,
+  full_name TEXT,
+  email TEXT UNIQUE,
+  api_key TEXT,
+  created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
+  updated_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
+);
+
+-- Enable Row Level Security for users
+ALTER TABLE users ENABLE ROW LEVEL SECURITY;
+
+-- Create policy to allow users to access their own data
+CREATE POLICY user_policy ON users
+  FOR ALL
+  TO authenticated
+  USING (id = auth.uid());
+`;
+
+const createSearchesTableSQL = `
+CREATE TABLE IF NOT EXISTS searches (
+  id SERIAL PRIMARY KEY,
+  searchId TEXT NOT NULL UNIQUE,
+  user_id TEXT NOT NULL,
+  query TEXT NOT NULL,
+  enhanced_query TEXT,
+  sources TEXT,
+  summary TEXT,
+  created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
+  completed_at TIMESTAMP WITH TIME ZONE,
+  completed BOOLEAN DEFAULT FALSE,
+  search_approach TEXT
+);
+
+CREATE INDEX IF NOT EXISTS idx_searches_searchid ON searches(searchId);
+CREATE INDEX IF NOT EXISTS idx_searches_user_id ON searches(user_id);
+CREATE INDEX IF NOT EXISTS idx_searches_completed ON searches(completed);
+
+-- Enable Row Level Security for searches
+ALTER TABLE searches ENABLE ROW LEVEL SECURITY;
+
+-- Create policy for searches
+CREATE POLICY user_search_policy ON searches
+  FOR ALL
+  TO authenticated
+  USING (user_id = auth.uid());
+`;
+
+const createSuspendedWorkflowsTableSQL = `
+CREATE TABLE IF NOT EXISTS suspended_workflows (
+  id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+  searchId TEXT NOT NULL,
+  user_id TEXT NOT NULL,
+  suspended_at TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT NOW(),
+  resumed_at TIMESTAMP WITH TIME ZONE,
+  suspended_step_id TEXT NOT NULL,
+  suspend_data JSONB NOT NULL DEFAULT '{}'::jsonb,
+  resume_data JSONB,
+  workflow_state JSONB,
+  is_suspended BOOLEAN NOT NULL DEFAULT TRUE,
+  resume_error TEXT,
+  created_at TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT NOW(),
+  updated_at TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT NOW()
+);
+
+-- Add indexes for common queries
+CREATE INDEX IF NOT EXISTS suspended_workflows_searchid_idx ON suspended_workflows(searchId);
+CREATE INDEX IF NOT EXISTS suspended_workflows_userid_idx ON suspended_workflows(user_id);
+CREATE INDEX IF NOT EXISTS suspended_workflows_suspended_idx ON suspended_workflows(is_suspended);
+
+-- Add combination index for the most common lookup pattern
+CREATE INDEX IF NOT EXISTS suspended_workflows_search_user_suspended_idx
+ON suspended_workflows(searchId, user_id, is_suspended);
+
+-- Enable Row Level Security for suspended_workflows
+ALTER TABLE suspended_workflows ENABLE ROW LEVEL SECURITY;
+
+-- Create policy for suspended_workflows
+CREATE POLICY user_suspended_workflow_policy ON suspended_workflows
+  FOR ALL
+  TO authenticated
+  USING (user_id = auth.uid());
+`;
+
+const createTasksTableSQL = `
+CREATE TABLE IF NOT EXISTS tasks (
+  id TEXT PRIMARY KEY,
+  searchId TEXT NOT NULL,
+  userId TEXT NOT NULL,
+  title TEXT NOT NULL,
+  description TEXT,
+  priority TEXT NOT NULL CHECK (priority IN ('high', 'medium', 'low')),
+  status TEXT NOT NULL CHECK (status IN ('pending', 'in_progress', 'completed', 'blocked', 'cancelled')),
+  depends_on JSONB DEFAULT '[]'::jsonb,
+  created_at TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT NOW(),
+  updated_at TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT NOW(),
+  completed_at TIMESTAMP WITH TIME ZONE,
+  tags JSONB DEFAULT '[]'::jsonb,
+  metadata JSONB DEFAULT '{}'::jsonb
+);
+
+-- Optimized indexing for efficient memory access
+CREATE INDEX IF NOT EXISTS tasks_searchid_idx ON tasks(searchId);
+CREATE INDEX IF NOT EXISTS tasks_userid_idx ON tasks(userId);
+CREATE INDEX IF NOT EXISTS tasks_status_idx ON tasks(status);
+CREATE INDEX IF NOT EXISTS tasks_priority_idx ON tasks(priority);
+
+-- Enable Row Level Security for tasks
+ALTER TABLE tasks ENABLE ROW LEVEL SECURITY;
+
+-- Create policy for tasks
+CREATE POLICY user_tasks_policy ON tasks
+  FOR ALL
+  TO authenticated
+  USING (userId = auth.uid());
+`;
+
+const createWorkflowPlanningTableSQL = `
+CREATE TABLE IF NOT EXISTS workflow_planning (
+  id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+  searchId TEXT NOT NULL,
+  userId TEXT NOT NULL,
+  planning_stage TEXT NOT NULL CHECK (planning_stage IN (
+    'initial', 
+    'requirements_analysis', 
+    'task_decomposition', 
+    'strategy_formulation', 
+    'resource_allocation', 
+    'ready'
+  )),
+  planning_result JSONB DEFAULT '{}'::jsonb,
+  created_at TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT NOW(),
+  updated_at TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT NOW()
+);
+
+-- Optimized access patterns for planning retrieval
+CREATE INDEX IF NOT EXISTS workflow_planning_searchid_idx ON workflow_planning(searchId);
+CREATE INDEX IF NOT EXISTS workflow_planning_userid_idx ON workflow_planning(userId);
+
+-- Enable Row Level Security for workflow_planning
+ALTER TABLE workflow_planning ENABLE ROW LEVEL SECURITY;
+
+-- Create policy for workflow_planning
+CREATE POLICY user_workflow_planning_policy ON workflow_planning
+  FOR ALL
+  TO authenticated
+  USING (userId = auth.uid());
+`;
+
+// Function to execute SQL via REST API
+function executeSql(sql) {
+  return new Promise((resolve, reject) => {
+    const data = JSON.stringify({
+      query: sql
+    });
+
+    const options = {
+      hostname: supabaseHost,
+      port: 443,
+      path: '/rest/v1/rpc/exec_sql',
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Content-Length': data.length,
+        'apikey': SUPABASE_SERVICE_ROLE_KEY,
+        'Authorization': `Bearer ${SUPABASE_SERVICE_ROLE_KEY}`
+      }
+    };
+
+    const req = https.request(options, (res) => {
+      let responseData = '';
+
+      res.on('data', (chunk) => {
+        responseData += chunk;
+      });
+
+      res.on('end', () => {
+        if (res.statusCode === 200) {
+          resolve(responseData);
+        } else {
+          console.error(`Error response: ${res.statusCode} ${responseData}`);
+          
+          // Handle "function doesn't exist" error by checking for alternative methods
+          if (responseData.includes('not exist') || res.statusCode === 404) {
+            console.log('The exec_sql function appears to not exist. Will try direct SQL API if available.');
+            resolve({ alternativeMethod: true });
+          } else {
+            reject(new Error(`Failed to execute SQL: ${res.statusCode} ${responseData}`));
+          }
+        }
+      });
+    });
+
+    req.on('error', (error) => {
+      reject(new Error(`Error executing SQL: ${error.message}`));
+    });
+
+    req.write(data);
+    req.end();
+  });
+}
+
+// Functions to check if tables exist
+async function checkTableExists(tableName) {
+  return new Promise((resolve, reject) => {
+    const options = {
+      hostname: supabaseHost,
+      port: 443,
+      path: `/rest/v1/${tableName}?limit=1`,
+      method: 'GET',
+      headers: {
+        'apikey': SUPABASE_SERVICE_ROLE_KEY,
+        'Authorization': `Bearer ${SUPABASE_SERVICE_ROLE_KEY}`
+      }
+    };
+
+    const req = https.request(options, (res) => {
+      let responseData = '';
+
+      res.on('data', (chunk) => {
+        responseData += chunk;
+      });
+
+      res.on('end', () => {
+        if (res.statusCode === 200) {
+          console.log(`Table ${tableName} exists.`);
+          resolve(true);
+        } else if (res.statusCode === 404 || responseData.includes('does not exist')) {
+          console.log(`Table ${tableName} does not exist.`);
+          resolve(false);
+        } else {
+          console.error(`Error checking table ${tableName}: ${res.statusCode} ${responseData}`);
+          reject(new Error(`Error checking table ${tableName}: ${res.statusCode} ${responseData}`));
+        }
+      });
+    });
+
+    req.on('error', (error) => {
+      reject(new Error(`Error checking table ${tableName}: ${error.message}`));
+    });
+
+    req.end();
+  });
+}
+
+// Main setup function
+async function setupTables() {
+  console.log(`Setting up tables in Supabase at ${SUPABASE_URL}...`);
+
+  try {
+    // Check if tables exist
+    const usersExists = await checkTableExists('users');
+    const searchesExists = await checkTableExists('searches');
+    const suspendedWorkflowsExists = await checkTableExists('suspended_workflows');
+    const tasksExists = await checkTableExists('tasks');
+    const workflowPlanningExists = await checkTableExists('workflow_planning');
+
+    // Try running exec_sql to check if it's available
+    let useExecSql = true;
+    try {
+      const testResult = await executeSql('SELECT 1');
+      if (testResult && testResult.alternativeMethod) {
+        useExecSql = false;
+      }
+    } catch (error) {
+      console.log('exec_sql function not available:', error.message);
+      useExecSql = false;
+    }
+
+    if (!useExecSql) {
+      console.log('\nThe exec_sql function is not available in this Supabase instance.');
+      console.log('Please run the following SQL in the Supabase SQL Editor manually:');
+      console.log('\n--- USERS TABLE ---');
+      console.log(createUsersTableSQL);
+      console.log('\n--- SEARCHES TABLE ---');
+      console.log(createSearchesTableSQL);
+      console.log('\n--- SUSPENDED WORKFLOWS TABLE ---');
+      console.log(createSuspendedWorkflowsTableSQL);
+      console.log('\n--- TASKS TABLE ---');
+      console.log(createTasksTableSQL);
+      console.log('\n--- WORKFLOW PLANNING TABLE ---');
+      console.log(createWorkflowPlanningTableSQL);
+      return;
+    }
+
+    // Create tables if they don't exist
+    if (!usersExists) {
+      console.log('Creating users table...');
+      await executeSql(createUsersTableSQL);
+      console.log('Users table created successfully!');
+    }
+
+    if (!searchesExists) {
+      console.log('Creating searches table...');
+      await executeSql(createSearchesTableSQL);
+      console.log('Searches table created successfully!');
+    }
+
+    if (!suspendedWorkflowsExists) {
+      console.log('Creating suspended_workflows table...');
+      await executeSql(createSuspendedWorkflowsTableSQL);
+      console.log('Suspended workflows table created successfully!');
+    }
+
+    if (!tasksExists) {
+      console.log('Creating tasks table...');
+      await executeSql(createTasksTableSQL);
+      console.log('Tasks table created successfully!');
+    }
+
+    if (!workflowPlanningExists) {
+      console.log('Creating workflow_planning table...');
+      await executeSql(createWorkflowPlanningTableSQL);
+      console.log('Workflow planning table created successfully!');
+    }
+
+    console.log('\nAll tables have been set up successfully!');
+  } catch (error) {
+    console.error('Error setting up tables:', error.message);
+    console.error('Please run the SQL manually in the Supabase SQL Editor.');
+  }
+}
+
+// Run the setup
+setupTables().catch(console.error);

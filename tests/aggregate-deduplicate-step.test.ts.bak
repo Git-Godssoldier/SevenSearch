@@ -1,0 +1,47 @@
+import test from 'node:test';
+import assert from 'node:assert/strict';
+import { aggregateAndDeduplicateSearchResultsStep } from '../src/lib/mastra-steps/aggregate-deduplicate-step';
+
+const baseContext = {
+  SCRAPYBARA_API_KEY: '',
+  EXA_API_KEY: '',
+  FIRECRAWL_API_KEY: '',
+  JINA_API_KEY: '',
+  pushUpdateToClient: () => {},
+  searchId: 'test-search',
+  userId: 'test-user'
+};
+
+test('aggregate step handles missing input arrays', async () => {
+  const result = await aggregateAndDeduplicateSearchResultsStep.execute({
+    data: {
+      planningOutput: { enhancedQuery: '', researchPlan: '', subQuestions: [] }
+    } as any,
+    context: baseContext as any
+  });
+  assert.equal(Array.isArray(result.aggregatedResults), true);
+  assert.equal(result.aggregatedResults.length, 0);
+});
+
+// Test deduplication with highlight trimming
+
+test('aggregate step trims highlights safely', async () => {
+  const highlights = Array.from({ length: 6 }, (_, i) => ({ text: `h${i}`, score: i }));
+  const exaResults = {
+    searchProvider: 'exa',
+    results: [
+      { url: 'http://example.com', provider: 'exa', highlights },
+      { url: 'http://example.com', provider: 'exa', highlights: [] }
+    ]
+  };
+
+  const result = await aggregateAndDeduplicateSearchResultsStep.execute({
+    data: {
+      exaResults,
+      planningOutput: { enhancedQuery: '', researchPlan: '', subQuestions: [] }
+    } as any,
+    context: baseContext as any
+  });
+
+  assert.equal(result.aggregatedResults[0].highlights?.length <= 5, true);
+});

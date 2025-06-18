@@ -1,0 +1,41 @@
+# Overview
+SevenSearch is a powerful, AI-driven search aggregation platform that simultaneously queries multiple search providers (e.g., Google, Bing, Exa, Firecrawl) to deliver comprehensive, deduplicated, and ranked search results. It is designed for researchers, developers, and knowledge workers who need to cast a wide net for information and receive a single, coherent summary of findings.
+
+# Core Features
+- **Multi-Provider Search:** Queries multiple search APIs in parallel.
+- **AI-Powered Aggregation:** Uses AI to aggregate, deduplicate, and rank results from all sources.
+- **Workflow Management:** Leverages a Mastra-based workflow system to orchestrate the search, aggregation, and summarization steps.
+- **Extensible Architecture:** New search providers can be easily added as new "steps" in the workflow.
+
+# User Experience
+- **Simple Interface:** A single search box to initiate a query.
+- **Fast Results:** Asynchronous processing to deliver results as quickly as possible.
+- **Comprehensive Output:** A single, unified view of the best results from all sources.
+
+# Technical Architecture
+- **Frontend:** Next.js with React and Tailwind CSS.
+- **Backend:** Next.js API routes.
+- **Search Workflow:** A series of Mastra steps for each search provider, followed by aggregation and summarization steps.
+- **Providers:** Exa, Firecrawl, and potentially others.
+
+# Development Roadmap
+- **MVP:**
+  - Implement the core search workflow with Exa and Firecrawl as the initial providers.
+  - Create the aggregation and deduplication logic.
+  - Build a simple UI to display the search results.
+- **Future Enhancements:**
+  - Add more search providers.
+  - Implement user accounts and search history.
+  - Add a summarization step to the workflow.
+
+# Logical Dependency Chain
+1.  Set up the basic Next.js application structure.
+2.  Implement the Mastra workflow engine.
+3.  Create the Exa and Firecrawl search steps.
+4.  Implement the aggregation and deduplication step.
+5.  Build the frontend UI to display results.
+
+# Risks and Mitigations
+- **API Rate Limits:** Implement caching and intelligent query distribution to avoid hitting rate limits.
+- **Result Deduplication:** Develop a robust algorithm for identifying and merging duplicate results.
+- **Performance:** Optimize the workflow to ensure results are returned in a timely manner.

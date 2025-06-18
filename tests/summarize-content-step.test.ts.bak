@@ -1,0 +1,29 @@
+import test from 'node:test';
+import assert from 'node:assert/strict';
+import summarizeContentStep from '../src/lib/mastra-steps/summarize-content-step';
+
+const baseContext = {
+  SCRAPYBARA_API_KEY: '',
+  EXA_API_KEY: '',
+  FIRECRAWL_API_KEY: '',
+  JINA_API_KEY: '',
+  pushUpdateToClient: () => {},
+  searchId: 'test-search',
+  userId: 'test-user'
+};
+
+test('summarize step handles empty relevantTexts array', async () => {
+  try {
+    await summarizeContentStep.execute({
+      data: {
+        relevantTexts: [],
+        planningOutput: { enhancedQuery: '', researchPlan: '', subQuestions: [] }
+      } as any,
+      context: baseContext as any
+    });
+  } catch (err) {
+    assert.ok(err instanceof Error);
+    // Error should be about missing Gemini API key, not a TypeError from slice
+    assert.match((err as Error).message, /Gemini API key/);
+  }
+});
