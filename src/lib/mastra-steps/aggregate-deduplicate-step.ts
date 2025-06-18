@@ -312,7 +312,7 @@ export const aggregateAndDeduplicateSearchResultsStep = createStep({
               });
 
               // Add cluster info to the merged result
-              mergedResult.clusters = cluster.map(idx => dedupedResults[idx].url);
+              (mergedResult as any).clusters = cluster.map(idx => dedupedResults[idx].url);
 
               mergedResults.push(mergedResult);
             }

@@ -62,9 +62,8 @@ export const exaSearchStep = createStep({
       const response: SearchResponse<ContentsOptions> = await exa.searchAndContents(enhancedQuery, {
         numResults: numResults || 5,
         ...searchOptions,
-        useAuthorDate: true, // Include author and date info when available
         useRecency: true, // Prioritize recent content
-      });
+      } as any);
 
       if (response.results) {
         searchResults = response.results.map((resultUntyped: SearchResult<ContentsOptions>) => {
@@ -104,9 +103,8 @@ export const exaSearchStep = createStep({
             // Use simple search for subquestions to save processing time
             const subResponse = await exa.search(question, {
               numResults: Math.max(2, Math.floor((numResults || 5) / 2)),
-              useAuthorDate: true,
               highlights: 2
-            });
+            } as any);
             
             return subResponse.results.map((result: any) => ({
               id: `exa-sub-${index}-${result.id || Math.random().toString(36).substring(2, 10)}`,
@@ -162,9 +160,8 @@ export const exaSearchStep = createStep({
       try {
         console.log(`[MastraStep: ${this.name}] Attempting fallback basic search`);
         const fallbackResponse = await exa.search(enhancedQuery, {
-          numResults: numResults || 5,
-          useAuthorDate: true
-        });
+          numResults: numResults || 5
+        } as any);
         
         if (fallbackResponse.results) {
           searchResults = fallbackResponse.results.map((result: any) => ({

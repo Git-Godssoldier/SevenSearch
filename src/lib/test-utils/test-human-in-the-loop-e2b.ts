@@ -7,7 +7,7 @@
  */
 
 import { Mastra } from '@mastra/core';
-import { ConsoleLogger } from '@mastra/loggers';
+import { PinoLogger } from '@mastra/loggers';
 import { v4 as uuidv4 } from 'uuid';
 import { humanReviewWorkflow } from '../mastra-vnext-workflows';
 import { EventStreamWriter } from '../mastra-vnext-utils';

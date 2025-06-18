@@ -63,7 +63,7 @@ export async function POST(request: Request) {
     }
 
     // Validate required API keys before starting
-    const missingKeys = [];
+    const missingKeys: string[] = [];
     if (!process.env.GEMINI_API_KEY) missingKeys.push('GEMINI_API_KEY');
     if (!userApiKey && !process.env.SCRAPYBARA_API_KEY) missingKeys.push('SCRAPYBARA_API_KEY');
     if (!process.env.EXA_API_KEY) missingKeys.push('EXA_API_KEY');

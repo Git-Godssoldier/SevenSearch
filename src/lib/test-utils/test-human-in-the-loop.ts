@@ -6,7 +6,7 @@
  */
 
 import { Mastra } from '@mastra/core';
-import { ConsoleLogger } from '@mastra/loggers';
+import { PinoLogger } from '@mastra/loggers';
 import { v4 as uuidv4 } from 'uuid';
 import { humanReviewWorkflow } from '../mastra-vnext-workflows';
 import { EventStreamWriter } from '../mastra-vnext-utils';
@@ -32,7 +32,7 @@ async function runHumanReviewWorkflow() {
   
   // Initialize Mastra with the workflow
   const mastra = new Mastra({
-    logger: new ConsoleLogger('info'),
+    logger: new PinoLogger('info'),
     vnext_workflows: {
       humanReviewWorkflow
     }

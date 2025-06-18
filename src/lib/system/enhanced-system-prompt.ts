@@ -170,7 +170,7 @@ Advanced error handling for search operations:
 ## **Multi-Engine Coordination Strategies**
 
 ### **Parallel Search Pattern**
-```typescript
+\`\`\`typescript
 const parallelSearch = async (query: string) => {
   const engines = ['exa', 'jina', 'firecrawl']
   const searchPromises = engines.map(engine => 
@@ -182,10 +182,10 @@ const parallelSearch = async (query: string) => {
     yield processAndDeduplicateResult(result)
   }
 }
-```
+\`\`\`
 
 ### **Sequential Enhancement Pattern**
-```typescript
+\`\`\`typescript
 const sequentialSearch = async (query: string) => {
   // Phase 1: Fast semantic search for immediate results
   const quickResults = await searchExa(query)
@@ -199,7 +199,7 @@ const sequentialSearch = async (query: string) => {
   const specializedResults = await searchJina(fillGaps(query, previousResults))
   yield { phase: 'complete', results: synthesizeAll(allResults) }
 }
-```
+\`\`\`
 
 ## **Adaptive Response Patterns**
 
@@ -251,7 +251,7 @@ After EACH search interaction:
 5. **Learning Integration**: Update engine selection and query optimization strategies
 
 ## **Date Context**
-Today's date is ${new Date().toISOString().split('T')[0]}
+Today's date is {DATE_PLACEHOLDER}
 
 ---
 
@@ -263,7 +263,7 @@ Remember: You're not just a search engine—you're an intelligent search orchest
  */
 export function getEnhancedSystemPrompt(): string {
   const currentDate = new Date().toISOString().split('T')[0]
-  return SEVENSEARCH_ENHANCED_SYSTEM_PROMPT.replace('${new Date().toISOString().split(\'T\')[0]}', currentDate)
+  return SEVENSEARCH_ENHANCED_SYSTEM_PROMPT.replace('{DATE_PLACEHOLDER}', currentDate)
 }
 
 /**

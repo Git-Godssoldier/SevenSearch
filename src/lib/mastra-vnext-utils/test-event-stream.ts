@@ -7,7 +7,7 @@
 
 import { EventStreamWriter, EventType } from './stream-events';
 import { createStep, createWorkflow, Mastra } from '@mastra/core';
-import { ConsoleLogger } from '@mastra/loggers';
+import { PinoLogger } from '@mastra/loggers';
 import { z } from 'zod';
 import fs from 'fs';
 import path from 'path';

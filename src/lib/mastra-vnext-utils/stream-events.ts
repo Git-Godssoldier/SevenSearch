@@ -157,7 +157,7 @@ export class EventStreamWriter {
     const stepInfo = this.getStepInfo(stepId);
 
     // Base update object
-    let update: z.infer<typeof streamChunkOutput> = {
+    const update: z.infer<typeof streamChunkOutput> = {
       step: stepInfo.clientStep,
       type: `${stepInfo.clientType}_${currentStep.status}`,
       payload: {
@@ -217,7 +217,7 @@ export class EventStreamWriter {
     const { status, searchId, query, metadata, error, suspended } = event.payload;
 
     // Base workflow update
-    let update: z.infer<typeof streamChunkOutput> = {
+    const update: z.infer<typeof streamChunkOutput> = {
       step: 0, // Workflow events are typically step 0 (global)
       type: `workflow_${status}`,
       payload: {

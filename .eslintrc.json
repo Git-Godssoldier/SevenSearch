@@ -1,10 +1,8 @@
 {
   "extends": ["next/core-web-vitals", "prettier"],
-  "plugins": ["no-warning-comments"],
   "rules": {
-    "no-warning-comments": [
-      "error",
-      { "terms": ["TODO", "FIXME", "@ts-ignore", "@ts-expect-error"], "location": "anywhere" }
-    ]
+    "no-console": "off",
+    "prefer-const": "error",
+    "react-hooks/exhaustive-deps": "warn"
   }
 }

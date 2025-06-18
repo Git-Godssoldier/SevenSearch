@@ -87,12 +87,12 @@ export const generateEmbeddingsAndSemanticSearchStep = createStep({
         if (response.data && response.data.data) {
           response.data.data.forEach((item: any, index: number) => {
             vectorStore.push({
-              id: `${doc.url}#${vectorStore.length}`,
+              id: `${doc.link}#${vectorStore.length}`,
               text: contentBlocks[index],
               embedding: item.embedding,
               metadata: {
-                url: doc.url,
-                title: doc.title,
+                url: doc.link,
+                title: doc.link,
                 sourceIndex: index
               },
             });

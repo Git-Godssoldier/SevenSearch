@@ -4,7 +4,7 @@ import { auth } from "@/lib/auth";
 import { z } from 'zod';
 import type { Session } from "next-auth";
 import { Mastra } from '@mastra/core';
-import { ConsoleLogger } from '@mastra/loggers';
+import { PinoLogger } from '@mastra/loggers';
 
 // Mastra vNext imports
 import { humanReviewResumeSchema } from '@/lib/mastra-vnext-steps';

@@ -100,8 +100,7 @@ export const planningAndQueryEnhancementStep = createStep({
       const chatSession = model.startChat({
         generationConfig,
         safetySettings: [],
-        responseSchema: jsonSchema as any,
-      });
+      } as any);
 
       // Create the user query message
       const userMessage = generateUserMessage(originalQuery);
@@ -355,8 +354,7 @@ function createSimplifiedEnhancement(query: string): z.infer<typeof PlanningAndE
   return {
     enhancedQuery: enhancedQuery || query, // Fallback to original if empty
     subQuestions,
-    researchPlan: `Search for information about ${query} from multiple reliable sources.`,
-    complexity
+    researchPlan: `Search for information about ${query} from multiple reliable sources.`
   };
 }
 

@@ -118,14 +118,14 @@ Format your response with:
       
       // Extract <think> sections for reasoning
       let reasoning = '';
-      const thinkMatches = result.match(/<think>(.*?)<\/think>/gs);
+      const thinkMatches = result.match(/<think>([\s\S]*?)<\/think>/g);
       if (thinkMatches) {
         reasoning = thinkMatches.join('\n').replace(/<\/?think>/g, '').trim();
       }
       
       // Parse citations from markdown footnotes
       const citationRegex = /\[\^(\d+)\]:\s*(https?:\/\/[^\s]+)(?:\s+"([^"]+)")?/g;
-      const citations = [];
+      const citations: any[] = [];
       let citationMatch;
       
       while ((citationMatch = citationRegex.exec(result)) !== null) {
@@ -138,7 +138,7 @@ Format your response with:
       
       // Extract content without <think> sections and citation footnotes
       const cleanedContent = result
-        .replace(/<think>.*?<\/think>/gs, '')
+        .replace(/<think>[\s\S]*?<\/think>/g, '')
         .replace(/\[\^(\d+)\]:\s*https?:\/\/[^\s]+(?:\s+"[^"]+")?\s*/g, '');
       
       // If no citations found, try to extract URLs directly from the content

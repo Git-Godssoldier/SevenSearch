@@ -24,7 +24,7 @@ export class Workflow {
   }
 
   async execute(initialContext: WorkflowContext): Promise<WorkflowContext> {
-    let context = initialContext
+    const context = initialContext
     for (const step of this.steps) {
       try {
         console.log(`Executing step: ${step.getName()}`)
@@ -38,7 +38,7 @@ export class Workflow {
   }
 
   async executeParallel(initialContext: WorkflowContext): Promise<WorkflowContext> {
-    let context = initialContext
+    const context = initialContext
     const promises = this.steps.map(step => {
       return (async () => {
         try {

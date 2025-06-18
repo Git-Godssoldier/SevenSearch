@@ -11,9 +11,9 @@ interface MarkdownProps {
 
 export function Markdown({ children, className }: MarkdownProps) {
   return (
-    <ReactMarkdown
-      className={cn("prose prose-sm dark:prose-invert max-w-none", className)}
-      remarkPlugins={[remarkGfm]}
+    <div className={cn("prose prose-sm dark:prose-invert max-w-none", className)}>
+      <ReactMarkdown
+        remarkPlugins={[remarkGfm]}
       components={{
         h1: ({ children }) => (
           <h1 className="text-2xl font-bold mb-4">{children}</h1>
@@ -36,16 +36,10 @@ export function Markdown({ children, className }: MarkdownProps) {
         li: ({ children }) => (
           <li className="leading-relaxed">{children}</li>
         ),
-        code: ({ children, inline }) => (
-          inline ? (
-            <code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">
-              {children}
-            </code>
-          ) : (
-            <code className="block bg-muted p-3 rounded-md text-sm font-mono overflow-x-auto">
-              {children}
-            </code>
-          )
+        code: ({ children }) => (
+          <code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">
+            {children}
+          </code>
         ),
         pre: ({ children }) => (
           <pre className="bg-muted p-3 rounded-md overflow-x-auto mb-3">
@@ -68,8 +62,9 @@ export function Markdown({ children, className }: MarkdownProps) {
           </a>
         ),
       }}
-    >
-      {children}
-    </ReactMarkdown>
+      >
+        {children}
+      </ReactMarkdown>
+    </div>
   )
 }
