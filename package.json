@@ -25,6 +25,7 @@
   "scripts": {
     "dev": "next dev",
     "build": "NODE_OPTIONS='--require ./.node-deprecation-ignore.js' next build",
+    "build:vercel": "next build",
     "start": "next start",
     "lint": "next lint",
     "test": "npm run test:e2e",
