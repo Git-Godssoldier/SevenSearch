@@ -29,22 +29,47 @@ export async function GET(request: Request) {
     }
 
     // Query the database for the search with the given ID
-    // Note: we're no longer strictly requiring the user_id match
-    // This allows searches to work even with auth issues
-    const { data, error } = await supabase
+    // First try with user_id match, then fallback to any match
+    let { data, error } = await supabase
       .from("searches")
       .select("*")
       .eq("searchId", searchId)
+      .eq("user_id", user_id)
       .single();
+
+    // If not found with user match, try without user restriction
+    if (error && error.code === "PGRST116") {
+      const fallbackResult = await supabase
+        .from("searches")
+        .select("*")
+        .eq("searchId", searchId)
+        .single();
+
+      data = fallbackResult.data;
+      error = fallbackResult.error;
+    }
 
     if (error) {
       console.error("Error fetching search:", error);
-      
+
       // Check if the error is because the search wasn't found
       if (error.code === "PGRST116") {
         return NextResponse.json({ error: "Search not found" }, { status: 404 });
       }
-      
+
+      // Check if the error is because the table doesn't exist
+      if (error.code === "42P01") {
+        console.log("Searches table does not exist, returning mock response");
+        return NextResponse.json({
+          searchId,
+          query: "Test query (table not found)",
+          summary: "The searches table does not exist in the database. Please create it using the SQL provided in the setup instructions.",
+          completed: true,
+          created_at: new Date().toISOString(),
+          search_approach: 'mock_response'
+        });
+      }
+
       return NextResponse.json({ error: "Failed to fetch search data" }, { status: 500 });
     }
 

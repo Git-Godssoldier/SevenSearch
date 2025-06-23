@@ -46,23 +46,10 @@ export function SimpleSearchResults({ searchId }: SimpleSearchResultsProps) {
   const [isStreaming, setIsStreaming] = useState(false)
   const [streamConnected, setStreamConnected] = useState(false)
 
-  // Handle streaming progress updates
-  const handleStreamMessage = useCallback((message: SSEMessage) => {
-    console.log('[Search Results] Stream message:', message);
-    setStreamingProgress(prev => [...prev, message]);
-    
-    if (message.type === 'workflow_completed') {
-      setIsStreaming(false);
-      setIsLoading(false);
-      // Trigger a final data fetch to get complete results
-      fetchSearchData();
-    }
-  }, []);
-
   // Fetch search data from API
   const fetchSearchData = useCallback(async () => {
     try {
-      const checkResponse = await fetch(`/api/search?id=${searchId}`)
+      const checkResponse = await fetch(`/api/check-search?id=${searchId}`)
       if (checkResponse.ok) {
         const dbData = await checkResponse.json()
         if (dbData && dbData.completed) {
@@ -101,6 +88,21 @@ export function SimpleSearchResults({ searchId }: SimpleSearchResultsProps) {
       return false;
     }
   }, [searchId]);
+
+  // Handle streaming progress updates
+  const handleStreamMessage = useCallback((message: SSEMessage) => {
+    console.log('[Search Results] Stream message:', message);
+    setStreamingProgress(prev => [...prev, message]);
+
+    if (message.type === 'workflow_completed') {
+      setIsStreaming(false);
+      setIsLoading(false);
+      // Trigger a final data fetch to get complete results
+      setTimeout(() => {
+        fetchSearchData();
+      }, 1000);
+    }
+  }, [fetchSearchData]);
 
   // Start streaming search
   const startStreamingSearch = useCallback(async () => {

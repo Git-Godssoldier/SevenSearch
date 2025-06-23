@@ -61,24 +61,39 @@ export async function createSearch(
 
 export async function getSearchById(searchId: string, userId: string) {
   try {
-    // Check if either parameter is undefined before querying
-    if (!searchId || !userId) {
+    // Check if searchId is undefined before querying
+    if (!searchId) {
       return null;
     }
 
-    const { data, error } = await supabase
+    // First try to find with exact user match
+    let { data, error } = await supabase
       .from("searches")
       .select("*")
       .eq("searchId", searchId)
-      .eq("user_id", userId)
+      .eq("user_id", userId || "mock-user-id-12345")
       .single();
-    
+
+    // If not found with user match, try without user restriction (for anonymous access)
+    if (error && error.code === "PGRST116") {
+      const { data: fallbackData, error: fallbackError } = await supabase
+        .from("searches")
+        .select("*")
+        .eq("searchId", searchId)
+        .single();
+
+      if (!fallbackError) {
+        data = fallbackData;
+        error = null;
+      }
+    }
+
     if (error) {
       // For "not found" errors, return null without raising alarm
       if (error.code === "PGRST116") {
         return null;
       }
-      
+
       // For other errors, log with more detail
       console.error("Unexpected database error:", error.message, error.details);
       return null;

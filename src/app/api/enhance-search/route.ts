@@ -1,4 +1,5 @@
 import { NextResponse } from "next/server";
+import { supabase } from "@/lib/supabase";
 import {
   EventStreamWriter,
   EventType
@@ -190,6 +191,34 @@ This test confirms that the infrastructure is ready for the full implementation.
           };
 
           console.log(`[API Route] Workflow completed successfully:`, result);
+
+          // Store the completed search in the database
+          try {
+            const { error: dbError } = await supabase
+              .from('searches')
+              .insert({
+                searchId,
+                user_id,
+                query,
+                enhanced_query: result.metadata?.enhancedQuery || query,
+                sources: JSON.stringify([]), // Will be populated by actual workflow
+                summary: result.summary || 'Search completed successfully',
+                completed: true,
+                completed_at: new Date().toISOString(),
+                search_approach: 'enhanced_search_workflow'
+              });
+
+            if (dbError) {
+              console.error('[API Route] Error storing search in database:', dbError);
+              // For now, continue without failing if database storage fails
+              console.log('[API Route] Continuing without database storage (table may not exist)');
+            } else {
+              console.log('[API Route] Search results stored in database successfully');
+            }
+          } catch (storageError) {
+            console.error('[API Route] Exception storing search results:', storageError);
+            console.log('[API Route] Continuing without database storage');
+          }
 
           // Send workflow completion event
           await writer.sendWorkflowCompleted(searchId, result);
