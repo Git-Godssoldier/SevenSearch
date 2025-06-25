@@ -57,19 +57,19 @@ interface SearchData {
 }
 function ErrorAlert({ message, onClose }: { message: string, onClose: () => void }) {
   return (
-    <div className="relative bg-destructive/15 border border-destructive/30 rounded-3xl p-4 mb-6 shadow-sm transition-all duration-200">
+    <div className="relative bg-primary/10 border border-primary/20 rounded-lg p-4 mb-6 shadow-sm transition-all duration-200">
       <div className="flex items-start">
-        <div className="h-8 w-8 rounded-full bg-destructive/10 text-destructive flex items-center justify-center mr-3">
+        <div className="h-8 w-8 rounded-full bg-primary/10 text-primary flex items-center justify-center mr-3">
           <AlertCircle className="h-4 w-4" />
         </div>
         <div className="flex-1">
-          <h3 className="font-medium text-destructive">Search Error</h3>
-          <p className="text-sm text-destructive/90 mt-1">{message}</p>
+          <h3 className="font-medium text-primary">Search Error</h3>
+          <p className="text-sm text-primary/90 mt-1">{message}</p>
         </div>
         {onClose && (
           <button
             onClick={onClose}
-            className="text-destructive/70 hover:text-destructive transition-colors duration-150 rounded-full h-8 w-8 flex items-center justify-center hover:bg-destructive/10"
+            className="text-primary/70 hover:text-primary transition-colors duration-150 rounded-full h-8 w-8 flex items-center justify-center hover:bg-primary/10"
           >
             <XCircle className="h-5 w-5" />
           </button>
@@ -271,18 +271,18 @@ export function SearchResults({ searchId }: SearchResultsProps) {
 
   const getStepIcon = (type: string, isActive: boolean, index: number) => {
     if (isActive && isLoading && index === currentStep) {
-      return <Loader2 className="h-5 w-5 animate-spin text-brand-blue" />;
+      return <Loader2 className="h-5 w-5 animate-spin text-primary" />;
     }
 
     switch (type) {
       case "enhancing":
-        return <Wand2 className="h-5 w-5 text-brand-pink" />;
+        return <Wand2 className="h-5 w-5 text-primary" />;
       case "searching":
-        return <Search className="h-5 w-5 text-brand-pink" />;
+        return <Search className="h-5 w-5 text-primary" />;
       case "reading":
-        return <BookOpen className="h-5 w-5 text-brand-orange" />;
+        return <BookOpen className="h-5 w-5 text-secondary" />;
       case "wrapping":
-        return <Sparkles className="h-5 w-5 text-brand-pink" />;
+        return <Sparkles className="h-5 w-5 text-primary" />;
       default:
         return null;
     }
@@ -292,18 +292,18 @@ export function SearchResults({ searchId }: SearchResultsProps) {
     if (index === currentStep) {
       switch (type) {
         case "enhancing":
-          return "border-brand-pink/20 bg-brand-pink/5";
+          return "border-primary/20 bg-primary/5";
         case "searching":
-          return "border-brand-pink/20 bg-brand-pink/5";
+          return "border-primary/20 bg-primary/5";
         case "reading":
-          return "border-brand-orange/20 bg-brand-orange/5";
+          return "border-secondary/20 bg-secondary/5";
         case "wrapping":
-          return "border-brand-pink/20 bg-brand-pink/5";
+          return "border-primary/20 bg-primary/5";
         default:
-          return "bg-background";
+          return "bg-surface";
       }
     } else {
-      return "bg-background";
+      return "bg-surface";
     }
   };
 
@@ -311,7 +311,7 @@ export function SearchResults({ searchId }: SearchResultsProps) {
   if (!initialCheckComplete || !queryValue) {
     return (
       <div className="flex justify-center py-20">
-        <Loader2 className="h-8 w-8 animate-spin text-brand-pink" />
+        <Loader2 className="h-8 w-8 animate-spin text-primary" />
       </div>
     );
   }
@@ -321,14 +321,14 @@ export function SearchResults({ searchId }: SearchResultsProps) {
 
     return (
       <div className="space-y-6" data-testid="search-results-container">
-        <h1 className="text-3xl font-bold">{quickData.query}</h1>
-        <div className="rounded-3xl border bg-card p-6 shadow-md">
+        <h1 className="text-3xl font-bold text-text">{quickData.query}</h1>
+        <div className="card">
           <div className="prose prose-sm dark:prose-invert max-w-none">
-            <h2 className="text-xl font-semibold mb-4">Answer</h2>
-            <div dangerouslySetInnerHTML={{ __html: quickData.summary }}></div>
+            <h2 className="text-xl font-semibold mb-4 text-text">Answer</h2>
+            <div className="text-text" dangerouslySetInnerHTML={{ __html: quickData.summary }}></div>
 
-            <div className="mt-8 pt-4 border-t">
-              <h3 className="text-sm font-medium mb-2">Sources</h3>
+            <div className="mt-8 pt-4 border-t border-border">
+              <h3 className="text-sm font-medium mb-2 text-text">Sources</h3>
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
                 {(typeof quickData.sources === 'string'
                   ? JSON.parse(quickData.sources)
@@ -340,7 +340,7 @@ export function SearchResults({ searchId }: SearchResultsProps) {
                         key={index}
                         name={`Source ${index + 1}`}
                         url={url}
-                        color={index % 2 === 0 ? "blue" : "blue-700"}
+                        color={index % 2 === 0 ? "primary" : "secondary"}
                       />
                     );
                   })}
@@ -355,7 +355,7 @@ export function SearchResults({ searchId }: SearchResultsProps) {
   // Render the search in progress view
   return (
     <div className="space-y-6" data-testid="search-results-container">
-      <h1 className="text-3xl font-bold">{queryValue}</h1>
+      <h1 className="text-3xl font-bold text-text">{queryValue}</h1>
       {error && (
         <ErrorAlert
           message={error.message}
@@ -367,28 +367,28 @@ export function SearchResults({ searchId }: SearchResultsProps) {
         {steps.map((step, index) => (
           <div
             key={index}
-            className={`rounded-2xl border p-4 relative ${getStepColor(
+            className={`rounded-lg border p-4 relative ${getStepColor(
               step.type,
               index
             )}`}
           >
             <div className="flex items-start gap-4">
-              <div className="mt-1 h-10 w-10 flex-shrink-0 rounded-full bg-background flex items-center justify-center">
+              <div className="mt-1 h-10 w-10 flex-shrink-0 rounded-full bg-surface flex items-center justify-center">
                 {getStepIcon(step.type, index === currentStep, index)}
               </div>
               <div className="flex-1">
                 <div className="flex items-center justify-between">
-                  <h3 className="font-medium">
+                  <h3 className="font-medium text-text">
                     {step.type === "enhancing" && "Enhancing your search term"}
                     {step.type === "searching" && "Searching the web"}
                     {step.type === "reading" && "Reading sources"}
                     {step.type === "wrapping" && "Synthesizing information"}
                   </h3>
-                  <span className="text-xs text-muted-foreground">
+                  <span className="text-xs text-muted">
                     Step {index + 1} of {steps.length}
                   </span>
                 </div>
-                <p className="text-sm text-muted-foreground mt-1">
+                <p className="text-sm text-muted mt-1">
                   {step.type === "enhancing" &&
                     "Optimizing your query for better results"}
                   {step.type === "searching" &&
@@ -402,11 +402,11 @@ export function SearchResults({ searchId }: SearchResultsProps) {
                 {step.type === "enhancing" &&
                   step.enhancedQueryLoaded &&
                   step.enhancedQuery && (
-                    <div className="mt-4 p-3 rounded-md bg-background border border-brand-pink/20">
-                      <p className="text-xs font-medium text-muted-foreground mb-1">
+                    <div className="mt-4 p-3 rounded-md bg-surface border border-primary/20">
+                      <p className="text-xs font-medium text-muted mb-1">
                         Enhanced search term:
                       </p>
-                      <p className="text-sm font-medium">{step.enhancedQuery}</p>
+                      <p className="text-sm font-medium text-text">{step.enhancedQuery}</p>
                     </div>
                   )}
 
@@ -422,7 +422,7 @@ export function SearchResults({ searchId }: SearchResultsProps) {
 
                 {step.type === "reading" && step.readingLinks && (
                   <div className="mt-4 space-y-2">
-                    <h4 className="text-xs font-medium text-muted-foreground">
+                    <h4 className="text-xs font-medium text-muted">
                       Links:
                     </h4>
                     <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
@@ -431,7 +431,7 @@ export function SearchResults({ searchId }: SearchResultsProps) {
                           key={linkIndex}
                           name={`Source ${linkIndex + 1}`}
                           url={link.url}
-                          color="orange"
+                          color="secondary"
                         />
                       ))}
                     </div>
@@ -440,7 +440,7 @@ export function SearchResults({ searchId }: SearchResultsProps) {
 
                 {step.type === "wrapping" && step.wrappingLoading && (
                   <div className="flex justify-center mt-4">
-                    <Loader2 className="h-5 w-5 animate-spin text-brand-pink" />
+                    <Loader2 className="h-5 w-5 animate-spin text-primary" />
                   </div>
                 )}
               </div>
@@ -450,20 +450,20 @@ export function SearchResults({ searchId }: SearchResultsProps) {
       </div>
 
       {showAnswer && (
-        <div className="rounded-3xl border bg-card p-6 shadow-md" data-testid="search-results-container">
+        <div className="card" data-testid="search-results-container">
           <div className="prose prose-sm dark:prose-invert max-w-none">
-            <h2 className="text-xl font-semibold mb-4">Answer</h2>
+            <h2 className="text-xl font-semibold mb-4 text-text">Answer</h2>
             {answerLoading ? (
               <div className="flex justify-center py-8">
-                <Loader2 className="h-8 w-8 animate-spin text-brand-blue" />
+                <Loader2 className="h-8 w-8 animate-spin text-primary" />
               </div>
             ) : (
-              <div dangerouslySetInnerHTML={{ __html: result || '' }}></div>
+              <div className="text-text" dangerouslySetInnerHTML={{ __html: result || '' }}></div>
             )}
 
             {!answerLoading && result && (
-              <div className="mt-8 pt-4 border-t">
-                <h3 className="text-sm font-medium mb-2">Sources</h3>
+              <div className="mt-8 pt-4 border-t border-border">
+                <h3 className="text-sm font-medium mb-2 text-text">Sources</h3>
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
                   {steps
                     .find(step => step.type === "reading")
@@ -472,7 +472,7 @@ export function SearchResults({ searchId }: SearchResultsProps) {
                         key={index}
                         name={`Source ${index + 1}`}
                         url={link.url}
-                        color={index % 2 === 0 ? "blue" : "blue-700"}
+                        color={index % 2 === 0 ? "primary" : "secondary"}
                       />
                     ))}
                 </div>
@@ -488,22 +488,18 @@ export function SearchResults({ searchId }: SearchResultsProps) {
 function SourceCard({
   name,
   url,
-  color = "pink",
+  color = "primary",
 }: {
   name: string;
   url: string;
-  color?: "pink" | "orange" | "blue" | "blue-700";
+  color?: "primary" | "secondary";
 }) {
   const getColorClass = () => {
     switch (color) {
-      case "pink":
-        return "bg-brand-pink/10 text-brand-pink";
-      case "orange":
-        return "bg-brand-orange/10 text-brand-orange";
-      case "blue":
-        return "bg-brand-blue/10 text-brand-blue";
-      case "blue-700":
-        return "bg-brand-blue/20 text-brand-blue";
+      case "primary":
+        return "bg-primary/10 text-primary";
+      case "secondary":
+        return "bg-secondary/10 text-secondary";
       default:
         return "bg-primary/10 text-primary";
     }
@@ -514,14 +510,14 @@ function SourceCard({
       href={url}
       target="_blank"
       rel="noopener noreferrer"
-      className="flex items-center gap-2 p-3 rounded-full bg-background hover:bg-neutral-60/10 transition-colors duration-200 border border-neutral-60/20"
+      className="flex items-center gap-2 p-3 rounded-lg bg-surface hover:bg-surface-2 transition-colors duration-200 border border-border"
     >
-      <div className={`h-8 w-8 rounded-full ${getColorClass()} flex items-center justify-center`}>
+      <div className={`h-8 w-8 rounded-md ${getColorClass()} flex items-center justify-center`}>
         <ExternalLink className="h-4 w-4" />
       </div>
       <div className="flex-1 min-w-0">
-        <p className="font-medium truncate">{name}</p>
-        <p className="text-xs text-muted-foreground truncate">{url}</p>
+        <p className="font-medium truncate text-text">{name}</p>
+        <p className="text-xs text-muted truncate">{url}</p>
       </div>
     </a>
   );

@@ -1,112 +1,102 @@
-import type { Config } from "tailwindcss"
+import type { Config } from "tailwindcss";
+import { fontFamily } from 'tailwindcss/defaultTheme';
 
-const config = {
-  darkMode: ["class"],
+const config: Config = {
+  darkMode: 'class',                     // toggled via <html class="dark">
   content: [
-    "./src/pages/**/*.{ts,tsx}",
-    "./src/components/**/*.{ts,tsx}",
-    "./src/app/**/*.{ts,tsx}",
-    "./src/**/*.{ts,tsx}",
-    "*.{js,ts,jsx,tsx,mdx}",
+    "./src/pages/**/*.{js,ts,jsx,tsx,mdx}",
+    "./src/components/**/*.{js,ts,jsx,tsx,mdx}",
+    "./src/app/**/*.{js,ts,jsx,tsx,mdx}",
   ],
-  prefix: "",
   theme: {
-    container: {
-      center: true,
-      padding: "2rem",
-      screens: {
-        "2xl": "1400px",
-      },
-    },
     extend: {
       colors: {
-        // Opulentia neutral color scale with alpha support
-        neutral: {
-          2: "rgb(var(--neutral-02) / <alpha-value>)",
-          5: "rgb(var(--neutral-05) / <alpha-value>)",
-          10: "rgb(var(--neutral-10) / <alpha-value>)",
-          20: "rgb(var(--neutral-20) / <alpha-value>)",
-          30: "rgb(var(--neutral-30) / <alpha-value>)",
-          40: "rgb(var(--neutral-40) / <alpha-value>)",
-          50: "rgb(var(--neutral-50) / <alpha-value>)",
-          60: "rgb(var(--neutral-60) / <alpha-value>)",
-          80: "rgb(var(--neutral-80) / <alpha-value>)",
-          90: "rgb(var(--neutral-90) / <alpha-value>)",
-          100: "rgb(var(--neutral-100) / <alpha-value>)",
-        },
-        // Semantic system colors
-        border: "rgb(var(--border) / <alpha-value>)",
-        input: "rgb(var(--input) / <alpha-value>)",
-        ring: "rgb(var(--ring) / <alpha-value>)",
-        background: "rgb(var(--background) / <alpha-value>)",
-        foreground: "rgb(var(--foreground) / <alpha-value>)",
-        primary: {
-          DEFAULT: "rgb(var(--primary) / <alpha-value>)",
-          foreground: "rgb(var(--primary-foreground) / <alpha-value>)",
-        },
-        secondary: {
-          DEFAULT: "rgb(var(--secondary) / <alpha-value>)",
-          foreground: "rgb(var(--secondary-foreground) / <alpha-value>)",
-        },
-        destructive: {
-          DEFAULT: "hsl(var(--destructive) / <alpha-value>)",
-          foreground: "rgb(var(--destructive-foreground) / <alpha-value>)",
-        },
-        muted: {
-          DEFAULT: "rgb(var(--muted) / <alpha-value>)",
-          foreground: "rgb(var(--muted-foreground) / <alpha-value>)",
-        },
-        accent: {
-          DEFAULT: "rgb(var(--accent) / <alpha-value>)",
-          foreground: "rgb(var(--accent-foreground) / <alpha-value>)",
-        },
-        popover: {
-          DEFAULT: "rgb(var(--popover) / <alpha-value>)",
-          foreground: "rgb(var(--popover-foreground) / <alpha-value>)",
-        },
-        card: {
-          DEFAULT: "rgb(var(--card) / <alpha-value>)",
-          foreground: "rgb(var(--card-foreground) / <alpha-value>)",
-        },
-        // Opulentia brand colors
-        brand: {
-          blue: "rgb(var(--brand-blue) / <alpha-value>)",
-          "blue-700": "rgb(var(--brand-blue-700) / <alpha-value>)",
-          // Legacy colors maintained for compatibility
-          pink: "hsl(var(--brand-pink) / <alpha-value>)",
-          orange: "hsl(var(--brand-orange) / <alpha-value>)",
-        },
+        /* neutral surfaces */
+        bg          : 'hsl(var(--bg) / <alpha-value>)',
+        surface     : 'hsl(var(--surface) / <alpha-value>)',
+        'surface-2' : 'hsl(var(--surface-2) / <alpha-value>)',
+        border      : 'hsl(var(--border) / <alpha-value>)',
+        text        : 'hsl(var(--text) / <alpha-value>)',
+        muted       : 'hsl(var(--muted-text) / <alpha-value>)',
+
+        /* brand + accent */
+        primary     : 'hsl(var(--primary) / <alpha-value>)',
+        'on-primary': 'hsl(var(--primary-on) / <alpha-value>)',
+        secondary   : 'hsl(var(--secondary) / <alpha-value>)',
+        'on-secondary':'hsl(var(--secondary-on) / <alpha-value>)',
       },
+
       borderRadius: {
-        lg: "var(--radius)",
-        md: "calc(var(--radius) - 2px)",
-        sm: "calc(var(--radius) - 4px)",
+        xs : 'var(--radius-xs)',
+        DEFAULT: 'var(--radius)',
+        lg : 'var(--radius-lg)',
       },
-      keyframes: {
-        "accordion-down": {
-          from: { height: "0" },
-          to: { height: "var(--radix-accordion-content-height)" },
-        },
-        "accordion-up": {
-          from: { height: "var(--radix-accordion-content-height)" },
-          to: { height: "0" },
-        },
+
+      boxShadow: {
+        sm : 'var(--shadow-sm)',
+        DEFAULT: 'var(--shadow)',
+        lg : 'var(--shadow-lg)',
+        glass: '0 4px 30px hsl(220 50% 2% / 0.25)',      // extra bloom for glass overlays
       },
-      animation: {
-        "accordion-down": "accordion-down 0.2s ease-out",
-        "accordion-up": "accordion-up 0.2s ease-out",
+
+      backdropBlur: {
+        glass: 'var(--glass-blur)',
       },
-      typography: {
-        DEFAULT: {
-          css: {
-            maxWidth: "100%",
-          },
-        },
+
+      spacing: {
+        1 : 'var(--space-1)',
+        2 : 'var(--space-2)',
+        3 : 'var(--space-3)',
+        4 : 'var(--space-4)',
+        5 : 'var(--space-5)',
+        6 : 'var(--space-6)',
+      },
+
+      fontFamily: {
+        sans: ['Inter', ...fontFamily.sans],
       },
     },
   },
-  plugins: [require("tailwindcss-animate"), require("@tailwindcss/typography")],
-} satisfies Config
+  plugins: [
+    /**
+     * Component primitives — usable immediately via @apply.
+     * They compile to CSS once, avoiding runtime overhead.
+     */
+    function ({ addComponents, theme }: any) {
+      addComponents({
+        /* === Buttons ======================================= */
+        '.btn': {
+          '@apply inline-flex items-center justify-center gap-2 font-medium transition active:scale-[.98] focus-visible:outline-none': {},
+          padding: `${theme('spacing.3')} ${theme('spacing.4')}`,
+          borderRadius: theme('borderRadius.DEFAULT'),
+        },
+        '.btn-primary': {
+          '@apply btn text-on-primary bg-primary hover:bg-primary/90 focus-visible:ring-2 focus-visible:ring-primary/50': {},
+        },
+        '.btn-secondary': {
+          '@apply btn text-on-secondary bg-secondary hover:bg-secondary/90 focus-visible:ring-2 focus-visible:ring-secondary/40': {},
+        },
 
-export default config
+        /* === Cards ========================================= */
+        '.card': {
+          '@apply bg-surface text-text border border-border shadow rounded-lg': {},
+          padding: theme('spacing.5'),
+        },
 
+        /* === Glass overlay (e.g. nav, modal) =============== */
+        '.glass': {
+          '@apply backdrop-blur-glass shadow-glass border border-border': {},
+          backgroundColor: 'hsl(var(--glass-bg))',
+        },
+
+        /* === Input ========================================= */
+        '.input': {
+          '@apply w-full bg-surface-2 text-text placeholder:opacity-60 border border-border rounded-md focus-visible:ring-2 focus-visible:ring-primary/40 focus-visible:outline-none transition': {},
+          padding: `${theme('spacing.3')} ${theme('spacing.4')}`,
+        },
+      });
+    },
+  ],
+};
+
+export default config;

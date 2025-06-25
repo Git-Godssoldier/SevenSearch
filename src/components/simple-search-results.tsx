@@ -208,20 +208,20 @@ export function SimpleSearchResults({ searchId }: SimpleSearchResultsProps) {
     return (
       <div className="space-y-6">
         {/* Connection Status */}
-        <div className="flex items-center justify-between p-4 bg-blue-50 dark:bg-blue-900/20 rounded-lg border">
+        <div className="flex items-center justify-between p-4 bg-surface-2 rounded-lg border border-border">
           <div className="flex items-center space-x-2">
             {streamConnected ? (
-              <Wifi className="h-4 w-4 text-green-600" />
+              <Wifi className="h-4 w-4 text-primary" />
             ) : (
-              <WifiOff className="h-4 w-4 text-gray-400" />
+              <WifiOff className="h-4 w-4 text-muted" />
             )}
-            <span className="text-sm font-medium">
+            <span className="text-sm font-medium text-text">
               {streamConnected ? 'Connected' : 'Connecting...'}
             </span>
           </div>
           <div className="flex items-center space-x-2">
-            <Loader2 className="h-4 w-4 animate-spin text-blue-600" />
-            <span className="text-sm text-gray-600 dark:text-gray-400">
+            <Loader2 className="h-4 w-4 animate-spin text-primary" />
+            <span className="text-sm text-muted">
               Real-time search in progress
             </span>
           </div>
@@ -230,27 +230,27 @@ export function SimpleSearchResults({ searchId }: SimpleSearchResultsProps) {
         {/* Progress Steps */}
         {streamingProgress.length > 0 && (
           <div className="space-y-3">
-            <h3 className="text-lg font-semibold">Search Progress</h3>
+            <h3 className="text-lg font-semibold text-text">Search Progress</h3>
             <div className="space-y-2">
               {streamingProgress.map((progress, index) => (
                 <div 
                   key={index} 
-                  className="flex items-center space-x-3 p-3 bg-gray-50 dark:bg-gray-800 rounded-lg"
+                  className="flex items-center space-x-3 p-3 bg-surface-2 rounded-lg"
                 >
-                  <div className="flex-shrink-0 w-6 h-6 bg-blue-600 text-white rounded-full flex items-center justify-center text-xs font-bold">
+                  <div className="flex-shrink-0 w-6 h-6 bg-primary text-on-primary rounded-full flex items-center justify-center text-xs font-bold">
                     {progress.step}
                   </div>
                   <div className="flex-1">
-                    <p className="text-sm font-medium capitalize">
+                    <p className="text-sm font-medium capitalize text-text">
                       {progress.type.replace(/_/g, ' ')}
                     </p>
                     {progress.payload?.message && (
-                      <p className="text-xs text-gray-600 dark:text-gray-400">
+                      <p className="text-xs text-muted">
                         {progress.payload.message}
                       </p>
                     )}
                   </div>
-                  <div className="text-xs text-gray-500">
+                  <div className="text-xs text-muted">
                     Step {progress.step}
                   </div>
                 </div>
@@ -263,8 +263,8 @@ export function SimpleSearchResults({ searchId }: SimpleSearchResultsProps) {
         {streamingProgress.length === 0 && (
           <div className="flex items-center justify-center py-12">
             <div className="text-center space-y-4">
-              <Loader2 className="h-8 w-8 animate-spin mx-auto text-blue-600" />
-              <p className="text-gray-600 dark:text-gray-400">
+              <Loader2 className="h-8 w-8 animate-spin mx-auto text-primary" />
+              <p className="text-muted">
                 Initializing search...
               </p>
             </div>
@@ -276,12 +276,12 @@ export function SimpleSearchResults({ searchId }: SimpleSearchResultsProps) {
 
   if (error) {
     return (
-      <div className="bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 rounded-lg p-6">
-        <h3 className="text-red-800 dark:text-red-200 font-medium mb-2">Search Error</h3>
-        <p className="text-red-600 dark:text-red-400">{error}</p>
+      <div className="bg-primary/10 border border-primary/20 rounded-lg p-6">
+        <h3 className="text-primary font-medium mb-2">Search Error</h3>
+        <p className="text-primary/90">{error}</p>
         <button 
           onClick={() => window.location.reload()} 
-          className="mt-4 px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 transition-colors"
+          className="btn-primary mt-4"
         >
           Try Again
         </button>
@@ -292,7 +292,7 @@ export function SimpleSearchResults({ searchId }: SimpleSearchResultsProps) {
   if (!searchData) {
     return (
       <div className="text-center py-12">
-        <p className="text-gray-600 dark:text-gray-400">No search results found.</p>
+        <p className="text-muted">No search results found.</p>
       </div>
     )
   }
@@ -300,12 +300,12 @@ export function SimpleSearchResults({ searchId }: SimpleSearchResultsProps) {
   return (
     <div className="space-y-6">
       {/* Search Info */}
-      <div className="border-b border-gray-200 dark:border-gray-700 pb-4">
-        <h1 className="text-2xl font-bold text-gray-900 dark:text-white mb-2">
+      <div className="border-b border-border pb-4">
+        <h1 className="text-2xl font-bold text-text mb-2">
           Search Results
         </h1>
         {searchData.note && (
-          <p className="text-sm text-blue-600 dark:text-blue-400 bg-blue-50 dark:bg-blue-900/20 px-3 py-2 rounded-lg">
+          <p className="text-sm text-primary bg-primary/10 px-3 py-2 rounded-lg">
             ℹ️ {searchData.note}
           </p>
         )}

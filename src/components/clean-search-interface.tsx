@@ -41,7 +41,7 @@ export function CleanSearchInterface({ onSearch, className }: CleanSearchInterfa
   ]
 
   return (
-    <div className={cn("min-h-screen flex items-center justify-center px-4", className)}>
+    <div className={cn("min-h-screen flex items-center justify-center px-4 bg-bg", className)}>
       <div className="w-full max-w-4xl mx-auto space-y-8">
         
         {/* Main Title */}
@@ -49,7 +49,7 @@ export function CleanSearchInterface({ onSearch, className }: CleanSearchInterfa
           <TextEffect 
             as="h1"
             preset="fade-in-blur"
-            className="text-5xl md:text-6xl font-bold bg-gradient-to-r from-gray-900 to-gray-600 dark:from-white dark:to-gray-300 bg-clip-text text-transparent"
+            className="text-5xl md:text-6xl font-bold text-text"
           >
             Search Everything
           </TextEffect>
@@ -57,7 +57,7 @@ export function CleanSearchInterface({ onSearch, className }: CleanSearchInterfa
           <TextEffect
             preset="fade-in-blur" 
             delay={200}
-            className="text-lg text-gray-600 dark:text-gray-400 max-w-2xl mx-auto"
+            className="text-lg text-muted max-w-2xl mx-auto"
           >
             Powered by multiple search engines and AI
           </TextEffect>
@@ -65,10 +65,10 @@ export function CleanSearchInterface({ onSearch, className }: CleanSearchInterfa
 
         {/* Search Interface */}
         <div className="w-full max-w-3xl mx-auto">
-          <div className="bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-700 rounded-3xl shadow-sm overflow-hidden">
+          <div className="bg-surface border border-border rounded-3xl shadow-sm overflow-hidden">
             
             {/* Category Pills */}
-            <div className="flex items-center gap-2 p-3 border-b border-gray-100 dark:border-gray-800">
+            <div className="flex items-center gap-2 p-3 border-b border-border">
               {[
                 { id: 'web', label: 'Web', icon: Search },
                 { id: 'academic', label: 'Academic', icon: Sparkles },
@@ -80,8 +80,8 @@ export function CleanSearchInterface({ onSearch, className }: CleanSearchInterfa
                   className={cn(
                     "flex items-center gap-1.5 px-3 py-1.5 rounded-full text-sm font-medium transition-colors",
                     selectedCategory === category.id
-                      ? "bg-blue-50 dark:bg-blue-900/20 text-blue-600 dark:text-blue-400"
-                      : "text-gray-600 dark:text-gray-400 hover:bg-gray-50 dark:hover:bg-gray-800"
+                      ? "bg-primary/10 text-primary"
+                      : "text-muted hover:bg-surface-2"
                   )}
                 >
                   <category.icon className="w-4 h-4" />
@@ -98,7 +98,7 @@ export function CleanSearchInterface({ onSearch, className }: CleanSearchInterfa
                 onKeyDown={handleKeyDown}
                 placeholder="What would you like to search for?"
                 disabled={isLoading}
-                className="w-full resize-none border-0 bg-transparent text-base leading-relaxed text-gray-900 dark:text-white placeholder:text-gray-500 dark:placeholder:text-gray-400 outline-none min-h-[60px] max-h-[200px]"
+                className="w-full resize-none border-0 bg-transparent text-base leading-relaxed text-text placeholder:text-muted/60 outline-none min-h-[60px] max-h-[200px]"
                 rows={1}
                 style={{
                   height: 'auto',
@@ -115,7 +115,7 @@ export function CleanSearchInterface({ onSearch, className }: CleanSearchInterfa
               <div className="flex items-center justify-between mt-3">
                 <div className="flex items-center gap-2">
                   <button
-                    className="p-2 rounded-full text-gray-500 hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors"
+                    className="p-2 rounded-full text-muted hover:bg-surface-2 transition-colors"
                     aria-label="Attach files"
                     disabled={isLoading}
                   >
@@ -123,7 +123,7 @@ export function CleanSearchInterface({ onSearch, className }: CleanSearchInterfa
                   </button>
                   
                   <button
-                    className="flex items-center gap-1 px-3 py-1.5 rounded-full bg-gray-50 dark:bg-gray-800 text-sm font-medium text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors"
+                    className="flex items-center gap-1 px-3 py-1.5 rounded-full bg-surface-2 text-sm font-medium text-muted hover:bg-border transition-colors"
                     disabled={isLoading}
                   >
                     <Sparkles className="w-4 h-4" />
@@ -137,8 +137,8 @@ export function CleanSearchInterface({ onSearch, className }: CleanSearchInterfa
                   className={cn(
                     "w-10 h-10 rounded-full flex items-center justify-center transition-colors",
                     input.trim() && !isLoading
-                      ? "bg-blue-600 hover:bg-blue-700 text-white"
-                      : "bg-gray-100 dark:bg-gray-800 text-gray-400 cursor-not-allowed"
+                      ? "bg-primary hover:bg-primary/90 text-on-primary"
+                      : "bg-surface-2 text-muted/50 cursor-not-allowed"
                   )}
                   aria-label="Search"
                 >
@@ -154,13 +154,13 @@ export function CleanSearchInterface({ onSearch, className }: CleanSearchInterfa
 
           {/* Quick Prompts */}
           <div className="flex flex-wrap justify-center gap-2 mt-6">
-            <span className="text-sm text-gray-500 dark:text-gray-400 mr-2">Try:</span>
+            <span className="text-sm text-muted mr-2">Try:</span>
             {quickPrompts.map((prompt, index) => (
               <button
                 key={index}
                 onClick={() => setInput(prompt)}
                 disabled={isLoading}
-                className="px-3 py-1 rounded-full bg-gray-100 dark:bg-gray-800 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors disabled:opacity-50"
+                className="px-3 py-1 rounded-full bg-surface-2 text-sm text-muted hover:bg-border transition-colors disabled:opacity-50"
               >
                 {prompt}
               </button>
@@ -170,7 +170,7 @@ export function CleanSearchInterface({ onSearch, className }: CleanSearchInterfa
 
         {/* Subtle Footer */}
         <div className="text-center">
-          <p className="text-xs text-gray-400 dark:text-gray-600">
+          <p className="text-xs text-muted/80">
             Powered by Exa, Jina AI, Firecrawl and more
           </p>
         </div>

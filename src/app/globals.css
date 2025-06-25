@@ -2,123 +2,66 @@
 @tailwind components;
 @tailwind utilities;
 
-@layer base {
-  :root {
-    /* Opulentia Color System - Neutral Scale (RGB format) */
-    --neutral-100: 0 0 0; /* Absolute darkest backgrounds */
-    --neutral-90: 38 38 38; /* Page backgrounds */
-    --neutral-80: 80 80 80; /* Card backgrounds, chat bubbles */
-    --neutral-60: 102 102 102; /* Borders, grid lines, disabled fills */
-    --neutral-50: 80 80 80; /* Standard backgrounds for components */
-    --neutral-40: 153 153 153; /* Input strokes, dividers */
-    --neutral-30: 179 179 179; /* Hover states on dark surfaces */
-    --neutral-20: 204 204 204; /* Subtle fills, card inset shadows */
-    --neutral-10: 230 230 230; /* Inset separators, outlines */
-    --neutral-05: 242 242 242; /* Hair-line borders, table row stripes */
-    --neutral-02: 250 250 250; /* Scrim for modal backdrops */
+/* ===  Base tokens  ========================================== */
+:root {
+  /* Neutral greys – light mode */
+  --bg          : 0 0% 98%;    /* paper white */
+  --surface     : 0 0% 100%;   /* card / canvas */
+  --surface-2   : 220 4% 95%;  /* secondary surface */
+  --border      : 220 5% 86%;
+  --text        : 220 12% 12%;
+  --muted-text  : 220 4% 46%;
 
-    /* Opulentia Brand Colors - World Blue */
-    --brand-blue: 53 134 255; /* Primary brand color */
-    --brand-blue-700: 37 94 179; /* Secondary interactions, selection highlights */
+  /* Brand accent – "Camellia Red" (Karl Lagerfeld homage) */
+  --primary     : 353 65% 48%;
+  --primary-on  : 0 0% 98%;
 
-    /* System/Semantic Mappings */
-    --background: var(--neutral-90);
-    --foreground: 255 255 255;
-    --card: var(--neutral-50);
-    --card-foreground: 255 255 255;
-    --popover: var(--neutral-50);
-    --popover-foreground: 255 255 255;
+  /* Secondary accent – restrained "Liquid Gold" edge */
+  --secondary   : 42 45% 48%;
+  --secondary-on: 0 0% 12%;
 
-    /* Primary color now maps to brand-blue */
-    --primary: var(--brand-blue);
-    --primary-foreground: 255 255 255;
+  /* Glass / translucency */
+  --glass-bg    : 220 4% 100% / 0.42; /* white glass */
+  --glass-blur  : 18px;
 
-    /* Legacy brand colors - maintained for backward compatibility */
-    --brand-pink: 330 85% 60%;
-    --brand-orange: 25 95% 53%;
+  /* Radii & elevation */
+  --radius-xs   : 0.25rem;
+  --radius      : 0.5rem;
+  --radius-lg   : 1rem;
+  --shadow-sm   : 0 1px 2px hsl(220 50% 2% / 0.08);
+  --shadow      : 0 2px 4px -1px hsl(220 50% 2% / 0.10),
+                  0 4px 6px -2px hsl(220 50% 2% / 0.08);
+  --shadow-lg   : 0 4px 10px -2px hsl(220 50% 2% / 0.15),
+                  0 6px 15px -4px hsl(220 50% 2% / 0.12);
 
-    /* System color updates */
-    --secondary: var(--neutral-50);
-    --secondary-foreground: 255 255 255;
-    --muted: var(--neutral-50);
-    --muted-foreground: 255 255 255 / 0.7;
-    --accent: var(--brand-blue-700);
-    --accent-foreground: 255 255 255;
-    --destructive: 0 62.8% 30.6%;
-    --destructive-foreground: 255 255 255;
-    --border: var(--neutral-60);
-    --input: var(--neutral-40);
-    --ring: var(--brand-blue);
-    --radius: 0.5rem;
+  /* Rhythm scale (spacing) */
+  --space-1     : 0.25rem;
+  --space-2     : 0.5rem;
+  --space-3     : 0.75rem;
+  --space-4     : 1rem;
+  --space-5     : 1.5rem;
+  --space-6     : 2rem;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root,
+  .dark {
+    /* Dark neutrals – Raf Simons industrial graphite */
+    --bg          : 220 6% 8%;
+    --surface     : 220 6% 10%;
+    --surface-2   : 220 6% 14%;
+    --border      : 220 4% 22%;
+    --text        : 0 0% 96%;
+    --muted-text  : 220 4% 64%;
+
+    /* Accents unchanged for brand consistency */
+    --primary     : 353 65% 50%;
+    --primary-on  : 0 0% 98%;
+    --secondary   : 42 45% 52%;
+    --secondary-on: 0 0% 12%;
+
+    /* Subtly darker glass */
+    --glass-bg    : 220 8% 12% / 0.45;
+    --glass-blur  : 16px;
   }
 }
-
-@layer base {
-  * {
-    @apply border-border;
-  }
-  body {
-    @apply bg-background text-foreground;
-  }
-}
-
-.prose {
-  @apply text-foreground;
-}
-
-.prose h1,
-.prose h2,
-.prose h3,
-.prose h4 {
-  @apply text-foreground;
-}
-
-.prose p,
-.prose ul,
-.prose ol {
-  @apply text-foreground/90;
-}
-
-.prose a {
-  @apply text-primary hover:text-primary/80;
-}
-
-/* Shadow system - following Opulentia Color System */
-.shadow-card {
-  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.35);
-}
-
-.shadow-inner {
-  box-shadow: inset 0 0 0 1px rgba(var(--neutral-20), 0.1);
-}
-
-.shadow-focus {
-  box-shadow: 0 0 0 3px rgba(var(--brand-blue), 0.25);
-}
-
-/* Minimal gradient - blue to blue-700 */
-.minimal-gradient {
-  background: linear-gradient(90deg, rgb(var(--brand-blue)), rgb(var(--brand-blue-700)));
-}
-
-/* Legacy minimal gradient - pink to orange (for backward compatibility) */
-.minimal-gradient-legacy {
-  background: linear-gradient(90deg, hsl(var(--brand-pink)), hsl(var(--brand-orange)));
-}
-
-/* Text gradient */
-.text-gradient {
-  background-clip: text;
-  -webkit-background-clip: text;
-  color: transparent;
-  background-image: linear-gradient(90deg, rgb(var(--brand-blue)), rgb(var(--brand-blue-700)));
-}
-
-/* Legacy text gradient (for backward compatibility) */
-.text-gradient-legacy {
-  background-clip: text;
-  -webkit-background-clip: text;
-  color: transparent;
-  background-image: linear-gradient(90deg, hsl(var(--brand-pink)), hsl(var(--brand-orange)));
-}
-

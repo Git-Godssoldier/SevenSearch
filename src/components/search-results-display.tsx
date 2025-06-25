@@ -66,7 +66,7 @@ export function SearchResultsDisplay({
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.3 }}
       >
-        <div className="text-gray-500 dark:text-gray-400">
+        <div className="text-muted">
           No search results found. Try a different query.
         </div>
       </motion.div>
@@ -81,7 +81,7 @@ export function SearchResultsDisplay({
       <AnimatePresence>
         {metrics && (
           <motion.div 
-            className="bg-gradient-to-r from-blue-50 to-indigo-50 dark:from-blue-900/20 dark:to-indigo-900/20 rounded-lg p-4"
+            className="bg-surface-2 rounded-lg p-4"
             initial={{ opacity: 0, scale: 0.95 }}
             animate={{ opacity: 1, scale: 1 }}
             exit={{ opacity: 0, scale: 0.95 }}
@@ -89,16 +89,16 @@ export function SearchResultsDisplay({
           >
             <div className="flex items-center justify-between text-sm">
               <div className="flex items-center gap-4">
-                <span className="text-gray-600 dark:text-gray-400">
+                <span className="text-muted">
                   Found {results.length} results in {metrics.totalTime}ms
                 </span>
-                <Badge variant="secondary" className="bg-green-100 dark:bg-green-900 text-green-800 dark:text-green-200">
+                <Badge variant="secondary" className="bg-primary/10 text-primary">
                   Quality: {formatScore(metrics.qualityScore)}%
                 </Badge>
               </div>
               
               {validation?.recommendations && validation.recommendations.length > 0 && (
-                <div className="text-xs text-blue-600 dark:text-blue-400">
+                <div className="text-xs text-secondary">
                   💡 {validation.recommendations[0]}
                 </div>
               )}
@@ -124,7 +124,7 @@ export function SearchResultsDisplay({
                 layout: { type: "spring", stiffness: 300, damping: 30 }
               }}
             >
-              <Card className="hover:shadow-lg transition-all duration-200 hover:scale-[1.01]">
+              <Card className="card hover:shadow-lg transition-all duration-200 hover:scale-[1.01]">
                 <CardHeader className="pb-3">
                   <div className="flex items-start justify-between gap-4">
                     <CardTitle className="text-lg leading-tight">
@@ -132,7 +132,7 @@ export function SearchResultsDisplay({
                         href={result.url}
                         target="_blank"
                         rel="noopener noreferrer"
-                        className="text-blue-600 dark:text-blue-400 hover:text-blue-800 dark:hover:text-blue-300 hover:underline flex items-center gap-2 transition-colors duration-200"
+                        className="text-primary hover:text-primary/80 hover:underline flex items-center gap-2 transition-colors duration-200"
                       >
                         {result.title}
                         <ExternalLink className="h-4 w-4 flex-shrink-0" />
@@ -140,7 +140,7 @@ export function SearchResultsDisplay({
                     </CardTitle>
                     
                     <motion.div 
-                      className="flex items-center gap-1 text-xs text-gray-500 dark:text-gray-400"
+                      className="flex items-center gap-1 text-xs text-muted"
                       initial={{ opacity: 0 }}
                       animate={{ opacity: 1 }}
                       transition={{ delay: 0.2 }}
@@ -150,11 +150,11 @@ export function SearchResultsDisplay({
                   </div>
                   
                   {/* Source and URL */}
-                  <div className="flex items-center gap-2 text-sm text-gray-600 dark:text-gray-400">
+                  <div className="flex items-center gap-2 text-sm text-muted">
                     <Badge variant="outline" className="text-xs">
                       {result.source}
                     </Badge>
-                    <span className="text-xs text-gray-500 dark:text-gray-500 truncate max-w-md">
+                    <span className="text-xs text-muted/80 truncate max-w-md">
                       {result.url}
                     </span>
                   </div>
@@ -163,7 +163,7 @@ export function SearchResultsDisplay({
                 <CardContent className="pt-0">
                   {/* Content */}
                   <motion.p 
-                    className="text-gray-700 dark:text-gray-300 leading-relaxed mb-4"
+                    className="text-text leading-relaxed mb-4"
                     initial={{ opacity: 0 }}
                     animate={{ opacity: 1 }}
                     transition={{ delay: 0.1 }}
@@ -173,7 +173,7 @@ export function SearchResultsDisplay({
                   
                   {/* Quality Scores */}
                   <motion.div 
-                    className="flex items-center gap-4 text-xs text-gray-500 dark:text-gray-400"
+                    className="flex items-center gap-4 text-xs text-muted"
                     initial={{ opacity: 0, y: 10 }}
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ delay: 0.15 }}
@@ -202,13 +202,13 @@ export function SearchResultsDisplay({
       <AnimatePresence>
         {metrics?.enginePerformance && Object.keys(metrics.enginePerformance).length > 0 && (
           <motion.div 
-            className="bg-gray-50 dark:bg-gray-900 rounded-lg p-4"
+            className="bg-surface-2 rounded-lg p-4"
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -20 }}
             transition={{ duration: 0.3, delay: 0.2 }}
           >
-            <h3 className="text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+            <h3 className="text-sm font-medium text-muted mb-2">
               Search Engine Performance
             </h3>
             <div className="flex flex-wrap gap-2">
@@ -233,16 +233,16 @@ export function SearchResultsDisplay({
       <AnimatePresence>
         {validation?.issues && validation.issues.length > 0 && (
           <motion.div 
-            className="bg-yellow-50 dark:bg-yellow-900/20 border border-yellow-200 dark:border-yellow-800 rounded-lg p-4"
+            className="bg-secondary/10 border border-secondary/20 rounded-lg p-4"
             initial={{ opacity: 0, x: -20 }}
             animate={{ opacity: 1, x: 0 }}
             exit={{ opacity: 0, x: 20 }}
             transition={{ duration: 0.3 }}
           >
-            <h3 className="text-sm font-medium text-yellow-800 dark:text-yellow-200 mb-2">
+            <h3 className="text-sm font-medium text-secondary mb-2">
               Search Quality Notes
             </h3>
-            <ul className="text-sm text-yellow-700 dark:text-yellow-300 space-y-1">
+            <ul className="text-sm text-secondary/90 space-y-1">
               {validation.issues.map((issue, index) => (
                 <motion.li 
                   key={index}

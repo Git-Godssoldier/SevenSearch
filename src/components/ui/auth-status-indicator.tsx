@@ -24,20 +24,7 @@ export function AuthStatusIndicator() {
   }
   
   return (
-    <div 
-      style={{
-        position: 'fixed',
-        bottom: '10px',
-        right: '10px',
-        padding: '8px 12px',
-        backgroundColor: 'rgba(255, 230, 153, 0.9)', 
-        color: '#333',
-        borderRadius: '6px',
-        fontSize: '12px',
-        zIndex: 10000,
-        boxShadow: '0 2px 10px rgba(0,0,0,0.2)'
-      }}
-    >
+    <div className="fixed bottom-4 right-4 z-50 rounded-lg border border-secondary/20 bg-secondary/10 px-3 py-2 text-xs font-medium text-secondary shadow-lg">
       Auth Bypass Active (Anonymous User)
     </div>
   )

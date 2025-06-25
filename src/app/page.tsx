@@ -5,6 +5,7 @@ import { useRouter } from 'next/navigation'
 import { CleanSearchInterface } from '@/components/clean-search-interface'
 import { GrokInspiredInput } from '@/components/grok-inspired-input'
 import { TextEffect } from '@/components/motion/text-effect'
+import { ThemeToggle } from '@/components/theme-toggle'
 
 export default function HomePage() {
   const router = useRouter()
@@ -42,31 +43,10 @@ export default function HomePage() {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-white to-gray-50 dark:from-gray-900 dark:to-gray-800">
-      {/* Toggle between interfaces */}
+    <div className="min-h-screen bg-bg text-text">
+      {/* Theme Toggle */}
       <div className="absolute top-4 right-4 z-10">
-        <div className="flex items-center gap-2 p-1 bg-white dark:bg-gray-800 rounded-full border border-gray-200 dark:border-gray-700 shadow-sm">
-          <button
-            onClick={() => setSearchMode('clean')}
-            className={`px-3 py-1 rounded-full text-sm font-medium transition-colors ${
-              searchMode === 'clean'
-                ? 'bg-blue-600 text-white'
-                : 'text-gray-600 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-700'
-            }`}
-          >
-            Clean
-          </button>
-          <button
-            onClick={() => setSearchMode('grok')}
-            className={`px-3 py-1 rounded-full text-sm font-medium transition-colors ${
-              searchMode === 'grok'
-                ? 'bg-blue-600 text-white'
-                : 'text-gray-600 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-700'
-            }`}
-          >
-            Grok
-          </button>
-        </div>
+        <ThemeToggle />
       </div>
 
       {/* Clean Interface */}
@@ -84,7 +64,7 @@ export default function HomePage() {
               <TextEffect 
                 as="h1"
                 preset="fade-in-blur"
-                className="text-4xl md:text-5xl font-semibold text-gray-900 dark:text-white"
+                className="text-4xl md:text-5xl font-semibold text-text"
               >
                 Ask anything
               </TextEffect>

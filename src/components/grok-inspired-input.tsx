@@ -68,7 +68,7 @@ export function GrokInspiredInput({
     <div className="w-full max-w-5xl mx-auto flex flex-col items-center">
       <div
         className={cn(
-          "w-full max-w-[760px] bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-700 rounded-3xl shadow-sm overflow-hidden",
+          "w-full max-w-[760px] bg-surface border border-border rounded-3xl shadow-sm overflow-hidden",
           disabled && "opacity-70",
           className
         )}
@@ -80,13 +80,13 @@ export function GrokInspiredInput({
           onKeyDown={handleKeyDown}
           placeholder="What would you like to search for?"
           disabled={disabled}
-          className="w-full resize-none border-0 bg-transparent p-4 text-base leading-normal text-gray-900 dark:text-white outline-none min-h-[24px] placeholder:text-gray-500 dark:placeholder:text-gray-400"
+          className="w-full resize-none border-0 bg-transparent p-4 text-base leading-normal text-text outline-none min-h-[24px] placeholder:text-muted/60"
         />
 
-        <div className="flex items-center justify-between px-4 py-2 border-t border-gray-100 dark:border-gray-800 h-12">
+        <div className="flex items-center justify-between px-4 py-2 border-t border-border h-12">
           <div className="flex items-center gap-2">
             <button
-              className="w-8 h-8 flex items-center justify-center rounded-full hover:bg-gray-100 dark:hover:bg-gray-800 text-gray-700 dark:text-gray-300 transition-colors disabled:opacity-50"
+              className="w-8 h-8 flex items-center justify-center rounded-full hover:bg-surface-2 text-muted transition-colors disabled:opacity-50"
               aria-label="Attach files"
               disabled={disabled}
             >
@@ -94,7 +94,7 @@ export function GrokInspiredInput({
             </button>
 
             <button
-              className="h-8 flex items-center justify-center gap-1 rounded-full bg-gray-100 dark:bg-gray-800 px-3 text-sm font-medium text-gray-700 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors disabled:opacity-50"
+              className="h-8 flex items-center justify-center gap-1 rounded-full bg-surface-2 px-3 text-sm font-medium text-muted hover:bg-border transition-colors disabled:opacity-50"
               disabled={disabled}
             >
               <Search className="h-4 w-4" />
@@ -103,7 +103,7 @@ export function GrokInspiredInput({
             </button>
 
             <button
-              className="h-8 flex items-center justify-center gap-1 rounded-full bg-gray-100 dark:bg-gray-800 px-3 text-sm font-medium text-gray-700 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors disabled:opacity-50"
+              className="h-8 flex items-center justify-center gap-1 rounded-full bg-surface-2 px-3 text-sm font-medium text-muted hover:bg-border transition-colors disabled:opacity-50"
               disabled={disabled}
             >
               <Sparkles className="h-4 w-4" />
@@ -114,7 +114,7 @@ export function GrokInspiredInput({
           <div className="flex items-center gap-2">
             <div className="relative">
               <button
-                className="h-8 flex items-center justify-center gap-1 rounded-full px-3 text-sm font-medium text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors disabled:opacity-50"
+                className="h-8 flex items-center justify-center gap-1 rounded-full px-3 text-sm font-medium text-muted hover:bg-surface-2 transition-colors disabled:opacity-50"
                 onMouseEnter={() => setShowModelTooltip(true)}
                 onMouseLeave={() => setShowModelTooltip(false)}
                 disabled={disabled}
@@ -124,7 +124,7 @@ export function GrokInspiredInput({
               </button>
 
               {showModelTooltip && (
-                <div className="absolute top-full right-0 mt-1 bg-gray-900 dark:bg-gray-100 text-white dark:text-gray-900 rounded-lg p-3 w-[250px] z-10">
+                <div className="absolute top-full right-0 mt-1 bg-surface-2 text-text rounded-lg p-3 w-[250px] z-10 border border-border">
                   <div className="font-semibold text-sm mb-1">HALO Orchestrator</div>
                   <div className="font-normal text-sm opacity-80">Multi-engine search with AI coordination</div>
                 </div>
@@ -135,8 +135,8 @@ export function GrokInspiredInput({
               className={cn(
                 "w-8 h-8 flex items-center justify-center rounded-full transition-colors",
                 input.trim() 
-                  ? "bg-blue-600 hover:bg-blue-700 text-white" 
-                  : "bg-gray-100 dark:bg-gray-800 text-gray-400 cursor-not-allowed"
+                  ? "bg-primary hover:bg-primary/90 text-on-primary" 
+                  : "bg-surface-2 text-muted/50 cursor-not-allowed"
               )}
               aria-label="Send message"
               disabled={!input.trim() || disabled}
@@ -150,7 +150,7 @@ export function GrokInspiredInput({
 
       <div className="flex flex-wrap gap-2 mt-4 justify-center">
         <button
-          className="h-9 flex items-center justify-center gap-2 rounded-full bg-gray-50 dark:bg-gray-900 px-4 text-sm font-medium text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors disabled:opacity-50"
+          className="h-9 flex items-center justify-center gap-2 rounded-full bg-surface-2 px-4 text-sm font-medium text-muted hover:bg-border transition-colors disabled:opacity-50"
           disabled={disabled}
         >
           <Search className="h-4 w-4" />
@@ -158,7 +158,7 @@ export function GrokInspiredInput({
         </button>
 
         <button
-          className="h-9 flex items-center justify-center gap-2 rounded-full bg-gray-50 dark:bg-gray-900 px-4 text-sm font-medium text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors disabled:opacity-50"
+          className="h-9 flex items-center justify-center gap-2 rounded-full bg-surface-2 px-4 text-sm font-medium text-muted hover:bg-border transition-colors disabled:opacity-50"
           disabled={disabled}
         >
           <HelpCircle className="h-4 w-4" />
@@ -166,7 +166,7 @@ export function GrokInspiredInput({
         </button>
 
         <button
-          className="h-9 flex items-center justify-center gap-2 rounded-full bg-gray-50 dark:bg-gray-900 px-4 text-sm font-medium text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors disabled:opacity-50"
+          className="h-9 flex items-center justify-center gap-2 rounded-full bg-surface-2 px-4 text-sm font-medium text-muted hover:bg-border transition-colors disabled:opacity-50"
           disabled={disabled}
         >
           <ImageIcon className="h-4 w-4" />
@@ -174,7 +174,7 @@ export function GrokInspiredInput({
         </button>
       </div>
 
-      <div className="text-xs text-gray-500 dark:text-gray-400 text-center mt-4">
+      <div className="text-xs text-muted/80 text-center mt-4">
         Powered by HALO orchestration with Exa, Jina AI, and Firecrawl
       </div>
     </div>
